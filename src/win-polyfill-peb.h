@@ -190,6 +190,9 @@ typedef struct _LDR_DATA_TABLE_ENTRY
       ULONG ProtectDelayLoad : 1;
       ULONG ReservedFlags3 : 2;
       ULONG DontCallForThreads : 1;
+      // 3.51 and higher LDRP_PROCESS_ATTACH_CALLED
+      // 6.2 and higher
+      // 0x00080000
       ULONG ProcessAttachCalled : 1;
       ULONG ProcessAttachFailed : 1;
       // 5.1 and higher LDRP_IMAGE_NOT_AT_BASE
