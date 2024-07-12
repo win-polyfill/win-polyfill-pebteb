@@ -75,12 +75,28 @@ void check_peb_BitField()
   }
 }
 
+void test_peb_LDR_DATA_TABLE_ENTRY()
+{
+  check_offsetof(offsetof(LDR_DATA_TABLE_ENTRY, InLoadOrderLinks), 0x00, 0x00);
+
+  check_offsetof(offsetof(LDR_DATA_TABLE_ENTRY, TlsIndex), 0x3A, 0x6E);
+
+  check_offsetof(offsetof(LDR_DATA_TABLE_ENTRY, nt_6_0.ForwarderLinks), 0x50, 0x98);
+  check_offsetof(offsetof(LDR_DATA_TABLE_ENTRY, nt_6_0.LoadTime), 0x70, 0xD8);
+
+  check_offsetof(offsetof(LDR_DATA_TABLE_ENTRY, DdagNode), 0x50, 0x98);
+  check_offsetof(offsetof(LDR_DATA_TABLE_ENTRY, LoadTime), 0x88, 0x0100);
+
+  check_offsetof(offsetof(LDR_DATA_TABLE_ENTRY, SigningLevel), 0xA4, 0x011C);
+}
+
 void test_PEB_LDR_DATA()
 {
   check_offsetof(offsetof(PEB_LDR_DATA, Length), 0x00, 0x00);
   check_offsetof(offsetof(PEB_LDR_DATA, Initialized), 0x04, 0x04);
   check_offsetof(offsetof(PEB_LDR_DATA, SsHandle), 0x08, 0x08);
   check_offsetof(offsetof(PEB_LDR_DATA, InLoadOrderModuleList), 0x0C, 0x10);
+  test_peb_LDR_DATA_TABLE_ENTRY();
   check_offsetof(offsetof(PEB_LDR_DATA, InMemoryOrderModuleList), 0x14, 0x20);
   check_offsetof(offsetof(PEB_LDR_DATA, InInitializationOrderModuleList), 0x1C, 0x30);
   check_offsetof(offsetof(PEB_LDR_DATA, EntryInProgress), 0x24, 0x40);
