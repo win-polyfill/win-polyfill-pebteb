@@ -4,7 +4,12 @@
  */
 
 #include "test.h"
-#include "win-polyfill-peb.h"
+
+#include "ntpebteb.h"
+
+#include "ntldr.h"
+#include "ntpsapi.h"
+#include "ntrtl.h"
 
 void check_peb_BitField()
 {

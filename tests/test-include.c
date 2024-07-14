@@ -3,5 +3,4 @@
  * SPDX-License-Identifier: MIT
  */
 
-#include "win-polyfill-peb.h"
-#include "win-polyfill-teb.h"
+#include "ntpebteb.h"

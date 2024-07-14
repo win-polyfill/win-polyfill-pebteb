@@ -1,8 +1,8 @@
 ﻿#include <sdkddkver.h>
 
 #include "test.h"
-#include "win-polyfill-peb.h"
-#include "win-polyfill-teb.h"
+#include "phnt.h"
+
 #include <windows.h>
 // pull items from ntdef.h
 #define NT_SUCCESS(Status) (((NTSTATUS)(Status)) >= 0)

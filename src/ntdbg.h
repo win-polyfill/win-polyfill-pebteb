@@ -9,6 +9,8 @@
 
 // Debugging
 
+#include "phnt_ntdef.h"
+
 NTSYSAPI
 VOID
 NTAPI

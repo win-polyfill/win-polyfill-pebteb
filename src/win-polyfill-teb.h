@@ -4,7 +4,6 @@
  */
 
 #pragma once
-#include "win-polyfill-winternl.h"
 
 #define STATIC_UNICODE_BUFFER_LENGTH 261
 #define WIN32_CLIENT_INFO_LENGTH 62
@@ -15,37 +14,6 @@ extern "C" {
 #endif
 
 typedef struct _PEB PEB;
-typedef struct _TEB_ACTIVE_FRAME TEB_ACTIVE_FRAME, *PTEB_ACTIVE_FRAME;
-typedef struct _RTL_ACTIVATION_CONTEXT_STACK_FRAME *PRTL_ACTIVATION_CONTEXT_STACK_FRAME;
-
-typedef struct _ACTIVATION_CONTEXT_STACK
-{
-  union
-  {
-    struct
-    {
-      ULONG Flags;
-      ULONG NextCookieSequenceNumber;
-      struct _RTL_ACTIVATION_CONTEXT_STACK_FRAME *ActiveFrame;
-      LIST_ENTRY FrameListCache;
-    } nt_5_0;
-    struct
-    {
-      PRTL_ACTIVATION_CONTEXT_STACK_FRAME ActiveFrame;
-      LIST_ENTRY FrameListCache;
-      ULONG Flags; // ACTIVATION_CONTEXT_STACK_FLAG_*
-      ULONG NextCookieSequenceNumber;
-      ULONG StackId;
-    };
-  };
-} ACTIVATION_CONTEXT_STACK, *PACTIVATION_CONTEXT_STACK;
-
-typedef struct _GDI_TEB_BATCH
-{
-  ULONG Offset;
-  ULONG_PTR HDC;
-  ULONG Buffer[GDI_BATCH_BUFFER_SIZE];
-} GDI_TEB_BATCH, *PGDI_TEB_BATCH;
 
 // ==TEB==
 // https://www.geoffchappell.com/studies/windows/km/ntoskrnl/inc/api/pebteb/teb/index.htm

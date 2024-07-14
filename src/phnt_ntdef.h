@@ -7,6 +7,59 @@
 #ifndef _PHNT_NTDEF_H
 #define _PHNT_NTDEF_H
 
+// Mode
+#define PHNT_MODE_KERNEL 0
+#define PHNT_MODE_USER 1
+
+// Version
+#define PHNT_WIN2K 50
+#define PHNT_WINXP 51
+#define PHNT_WS03 52
+#define PHNT_VISTA 60
+#define PHNT_WIN7 61
+#define PHNT_WIN8 62
+#define PHNT_WINBLUE 63
+#define PHNT_THRESHOLD 100
+#define PHNT_THRESHOLD2 101
+#define PHNT_REDSTONE 102
+#define PHNT_REDSTONE2 103
+#define PHNT_REDSTONE3 104
+#define PHNT_REDSTONE4 105
+#define PHNT_REDSTONE5 106
+#define PHNT_19H1 107
+#define PHNT_19H2 108
+#define PHNT_20H1 109
+#define PHNT_20H2 110
+#define PHNT_21H1 111
+#define PHNT_WIN10_21H2 112
+#define PHNT_WIN10_22H2 113
+#define PHNT_WIN11 114
+#define PHNT_WIN11_22H2 115
+#define PHNT_WIN11_23H2 116
+#define PHNT_WIN11_24H2 117
+
+#ifndef PHNT_MODE
+#define PHNT_MODE PHNT_MODE_USER
+#endif
+
+#ifndef PHNT_VERSION
+#define PHNT_VERSION PHNT_WIN11
+#endif
+
+// Options
+
+//#define PHNT_NO_INLINE_INIT_STRING
+
+#if (PHNT_MODE != PHNT_MODE_KERNEL)
+#include "win-polyfill-arch.h"
+#ifndef UMDF_USING_NTSTATUS
+#define UMDF_USING_NTSTATUS
+#endif
+#include <ntstatus.h>
+
+#include <windef.h>
+#endif
+
 #ifndef _NTDEF_
 #define _NTDEF_
 
@@ -52,6 +105,7 @@ typedef CSHORT *PCSHORT;
 typedef CLONG *PCLONG;
 
 typedef PCSTR PCSZ;
+typedef CONST WCHAR *LPCWCHAR, *PCWCHAR;
 
 typedef PVOID* PPVOID;
 
@@ -67,6 +121,12 @@ typedef struct _LARGE_INTEGER_128
 {
     LONGLONG QuadPart[2];
 } LARGE_INTEGER_128, *PLARGE_INTEGER_128;
+
+typedef GUID *PGUID;
+#ifndef __PCGUID_DEFINED__
+#define __PCGUID_DEFINED__
+typedef const GUID* PCGUID;
+#endif
 
 // NT status macros
 

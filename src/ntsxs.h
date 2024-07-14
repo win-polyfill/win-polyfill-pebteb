@@ -7,6 +7,8 @@
 #ifndef _NTSXS_H
 #define _NTSXS_H
 
+#include "phnt_ntdef.h"
+
 #define ACTIVATION_CONTEXT_DATA_MAGIC ('xtcA')
 #define ACTIVATION_CONTEXT_DATA_FORMAT_WHISTLER 1
 

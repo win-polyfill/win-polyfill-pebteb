@@ -1,5 +1,5 @@
 ﻿#include "test.h"
-#include "win-polyfill-teb.h"
+#include "ntpebteb.h"
 
 void test_teb()
 {

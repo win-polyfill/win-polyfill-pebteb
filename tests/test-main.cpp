@@ -1,8 +1,8 @@
 ﻿#include <sdkddkver.h>
 
 #include "test.h"
-#include "win-polyfill-peb.h"
-#include "win-polyfill-teb.h"
+#include "ntpebteb.h"
+
 #include <windows.h>
 
 void get_windows_version(TEB *teb)
