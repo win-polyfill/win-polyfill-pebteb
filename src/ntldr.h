@@ -55,20 +55,48 @@ typedef enum _LDR_DDAG_STATE
 // symbols
 typedef struct _LDR_DDAG_NODE
 {
-    LIST_ENTRY Modules;
-    PLDR_SERVICE_TAG_RECORD ServiceTagList;
-    ULONG LoadCount;
+  // 0x00 0x00 (6.2 and higher)
+  struct _LIST_ENTRY Modules;
+  struct _LDR_SERVICE_TAG_RECORD *ServiceTagList;
+  // 0x08 0x10 (6.2 and higher)
+  ULONG LoadCount;
+  // 0x10 0x1C (6.2 and higher)
+  union
+  {
+    // 6.2 to 6.3
+    ULONG ReferenceCount;
+    // 10.0 and higher
     ULONG LoadWhileUnloadingCount;
+  };
+  // 0x14 0x20 (6.2 and higher)
+  union
+  {
+    // 6.2 to 6.3
+    ULONG DependencyCount;
+    // 10.0 and higher
     ULONG LowestLink;
-    union
-    {
-        LDRP_CSLIST Dependencies;
-        SINGLE_LIST_ENTRY RemovalLink;
-    };
-    LDRP_CSLIST IncomingDependencies;
-    LDR_DDAG_STATE State;
-    SINGLE_LIST_ENTRY CondenseLink;
-    ULONG PreorderNumber;
+  };
+  // 0x18 0x28 (6.2 and higher)
+  union
+  {
+    // 6.2 to 6.3
+    SINGLE_LIST_ENTRY *RemovalLink;
+    // 6.2 and higher
+    LDRP_CSLIST Dependencies;
+  };
+  // 0x1C 0x30 (6.2 and higher)
+  LDRP_CSLIST IncomingDependencies;
+  // 0x20 0x38 (6.2 and higher)
+  LDR_DDAG_STATE State;
+  // 0x24 0x40 (6.2 and higher)
+  SINGLE_LIST_ENTRY *CondenseLink;
+  // 0x28 0x48 (6.2 and higher)
+  ULONG PreorderNumber;
+  struct
+  {
+    // 0x2C 0x4C (6.2 to 6.3)
+    ULONG LowestLink;
+  } nt_6_2;
 } LDR_DDAG_NODE, *PLDR_DDAG_NODE;
 
 // rev
