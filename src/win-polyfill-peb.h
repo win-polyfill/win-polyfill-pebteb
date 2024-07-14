@@ -11,7 +11,7 @@ extern "C" {
 #endif
 
 //0x4 bytes (sizeof)
-enum _LDR_DDAG_STATE
+typedef enum _LDR_DDAG_STATE
 {
   LdrModulesMerged = -5,
   LdrModulesInitError = -4,
@@ -28,10 +28,10 @@ enum _LDR_DDAG_STATE
   LdrModulesReadyToInit = 7,
   LdrModulesInitializing = 8,
   LdrModulesReadyToRun = 9
-};
+} LDR_DDAG_STATE;
 
 //0x4 bytes (sizeof)
-enum _LDR_DLL_LOAD_REASON
+typedef enum _LDR_DLL_LOAD_REASON
 {
   LoadReasonStaticDependency = 0,
   LoadReasonStaticForwarderDependency = 1,
@@ -41,10 +41,10 @@ enum _LDR_DLL_LOAD_REASON
   LoadReasonAsImageLoad = 5,
   LoadReasonAsDataLoad = 6,
   LoadReasonUnknown = -1
-};
+} LDR_DLL_LOAD_REASON;
 
 //0x4 bytes (sizeof)
-enum _LDR_HOT_PATCH_STATE
+typedef enum _LDR_HOT_PATCH_STATE
 {
   LdrHotPatchBaseImage = 0,
   LdrHotPatchNotApplied = 1,
@@ -52,26 +52,58 @@ enum _LDR_HOT_PATCH_STATE
   LdrHotPatchAppliedForward = 3,
   LdrHotPatchFailedToPatch = 4,
   LdrHotPatchStateMax = 5
-};
+} LDR_HOT_PATCH_STATE;
 
-struct _LDRP_CSLIST
+typedef struct _LDRP_CSLIST
 {
-  struct _SINGLE_LIST_ENTRY *Tail; //0x0
-};
+  SINGLE_LIST_ENTRY *Tail; //0x0
+} LDRP_CSLIST, *PLDRP_CSLIST;
 
-struct _LDR_DDAG_NODE
+typedef struct _LDR_DDAG_NODE
 {
-  struct _LIST_ENTRY Modules;                     //0x0
-  struct _LDR_SERVICE_TAG_RECORD *ServiceTagList; //0x10
-  ULONG LoadCount;                                //0x18
-  ULONG LoadWhileUnloadingCount;                  //0x1c
-  ULONG LowestLink;                               //0x20
-  struct _LDRP_CSLIST Dependencies;               //0x28
-  struct _LDRP_CSLIST IncomingDependencies;       //0x30
-  enum _LDR_DDAG_STATE State;                     //0x38
-  struct _SINGLE_LIST_ENTRY CondenseLink;         //0x40
-  ULONG PreorderNumber;                           //0x48
-};
+  // 0x00 0x00 (6.2 and higher)
+  struct _LIST_ENTRY Modules;
+  struct _LDR_SERVICE_TAG_RECORD *ServiceTagList;
+  // 0x08 0x10 (6.2 and higher)
+  ULONG LoadCount;
+  // 0x10 0x1C (6.2 and higher)
+  union
+  {
+    // 6.2 to 6.3
+    ULONG ReferenceCount;
+    // 10.0 and higher
+    ULONG LoadWhileUnloadingCount;
+  };
+  // 0x14 0x20 (6.2 and higher)
+  union
+  {
+    // 6.2 to 6.3
+    ULONG DependencyCount;
+    // 10.0 and higher
+    ULONG LowestLink;
+  };
+  // 0x18 0x28 (6.2 and higher)
+  union
+  {
+    // 6.2 to 6.3
+    SINGLE_LIST_ENTRY *RemovalLink;
+    // 6.2 and higher
+    LDRP_CSLIST Dependencies;
+  };
+  // 0x1C 0x30 (6.2 and higher)
+  LDRP_CSLIST IncomingDependencies;
+  // 0x20 0x38 (6.2 and higher)
+  LDR_DDAG_STATE State;
+  // 0x24 0x40 (6.2 and higher)
+  SINGLE_LIST_ENTRY *CondenseLink;
+  // 0x28 0x48 (6.2 and higher)
+  ULONG PreorderNumber;
+  struct
+  {
+    // 0x2C 0x4C (6.2 to 6.3)
+    ULONG LowestLink;
+  } nt_6_2;
+} LDR_DDAG_NODE, *PLDR_DDAG_NODE;
 
 //0x18 bytes (sizeof)
 struct _RTL_BALANCED_NODE
@@ -276,7 +308,7 @@ typedef struct _LDR_DATA_TABLE_ENTRY
   // 0x90 0x0108 (6.2 and higher)
   ULONG BaseNameHashValue;
   // 0x94 0x010C (6.2 and higher)
-  enum _LDR_DLL_LOAD_REASON LoadReason;
+  LDR_DLL_LOAD_REASON LoadReason;
   // 0x98 0x0110 (6.3 and higher)
   ULONG ImplicitPathOptions;
   // 0x9C 0x0114 (10.0 and higher)
@@ -287,7 +319,7 @@ typedef struct _LDR_DATA_TABLE_ENTRY
   UCHAR SigningLevel;
   ULONG CheckSum;                          //0x120
   VOID *ActivePatchImageBase;              //0x128
-  enum _LDR_HOT_PATCH_STATE HotPatchState; //0x130
+  LDR_HOT_PATCH_STATE HotPatchState; //0x130
 } LDR_DATA_TABLE_ENTRY, *PLDR_DATA_TABLE_ENTRY;
 
 // ==PEB_LDR_DATA==
